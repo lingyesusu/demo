@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.TTeamMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.TTeam">
+    <id column="C_ID" jdbcType="VARCHAR" property="cId" />
+    <result column="N_TEAMID" jdbcType="INTEGER" property="nTeamid" />
+    <result column="N_MEMBERSCOUNT" jdbcType="INTEGER" property="nMemberscount" />
+    <result column="C_DEPARTMENTNAME" jdbcType="VARCHAR" property="cDepartmentname" />
+    <result column="C_NAME" jdbcType="VARCHAR" property="cName" />
+    <result column="N_PRODUCTIONID" jdbcType="INTEGER" property="nProductionid" />
+    <result column="N_LEADERUSERID" jdbcType="INTEGER" property="nLeaderuserid" />
+    <result column="C_LEADERNAME" jdbcType="VARCHAR" property="cLeadername" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    C_ID, N_TEAMID, N_MEMBERSCOUNT, C_DEPARTMENTNAME, C_NAME, N_PRODUCTIONID, N_LEADERUSERID, 
+    C_LEADERNAME
+  </sql>
+  <select id="selectByExample" parameterType="com.example.demo.entity.TTeamExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_team
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_team
+    where C_ID = #{cId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_team
+    where C_ID = #{cId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.demo.entity.TTeamExample">
+    delete from t_team
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.entity.TTeam">
+    <selectKey keyProperty="cId" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_team (N_TEAMID, N_MEMBERSCOUNT, C_DEPARTMENTNAME, 
+      C_NAME, N_PRODUCTIONID, N_LEADERUSERID, 
+      C_LEADERNAME)
+    values (#{nTeamid,jdbcType=INTEGER}, #{nMemberscount,jdbcType=INTEGER}, #{cDepartmentname,jdbcType=VARCHAR}, 
+      #{cName,jdbcType=VARCHAR}, #{nProductionid,jdbcType=INTEGER}, #{nLeaderuserid,jdbcType=INTEGER}, 
+      #{cLeadername,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.entity.TTeam">
+    <selectKey keyProperty="cId" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_team
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nTeamid != null">
+        N_TEAMID,
+      </if>
+      <if test="nMemberscount != null">
+        N_MEMBERSCOUNT,
+      </if>
+      <if test="cDepartmentname != null">
+        C_DEPARTMENTNAME,
+      </if>
+      <if test="cName != null">
+        C_NAME,
+      </if>
+      <if test="nProductionid != null">
+        N_PRODUCTIONID,
+      </if>
+      <if test="nLeaderuserid != null">
+        N_LEADERUSERID,
+      </if>
+      <if test="cLeadername != null">
+        C_LEADERNAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nTeamid != null">
+        #{nTeamid,jdbcType=INTEGER},
+      </if>
+      <if test="nMemberscount != null">
+        #{nMemberscount,jdbcType=INTEGER},
+      </if>
+      <if test="cDepartmentname != null">
+        #{cDepartmentname,jdbcType=VARCHAR},
+      </if>
+      <if test="cName != null">
+        #{cName,jdbcType=VARCHAR},
+      </if>
+      <if test="nProductionid != null">
+        #{nProductionid,jdbcType=INTEGER},
+      </if>
+      <if test="nLeaderuserid != null">
+        #{nLeaderuserid,jdbcType=INTEGER},
+      </if>
+      <if test="cLeadername != null">
+        #{cLeadername,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.demo.entity.TTeamExample" resultType="java.lang.Long">
+    select count(*) from t_team
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_team
+    <set>
+      <if test="record.cId != null">
+        C_ID = #{record.cId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nTeamid != null">
+        N_TEAMID = #{record.nTeamid,jdbcType=INTEGER},
+      </if>
+      <if test="record.nMemberscount != null">
+        N_MEMBERSCOUNT = #{record.nMemberscount,jdbcType=INTEGER},
+      </if>
+      <if test="record.cDepartmentname != null">
+        C_DEPARTMENTNAME = #{record.cDepartmentname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cName != null">
+        C_NAME = #{record.cName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nProductionid != null">
+        N_PRODUCTIONID = #{record.nProductionid,jdbcType=INTEGER},
+      </if>
+      <if test="record.nLeaderuserid != null">
+        N_LEADERUSERID = #{record.nLeaderuserid,jdbcType=INTEGER},
+      </if>
+      <if test="record.cLeadername != null">
+        C_LEADERNAME = #{record.cLeadername,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_team
+    set C_ID = #{record.cId,jdbcType=VARCHAR},
+      N_TEAMID = #{record.nTeamid,jdbcType=INTEGER},
+      N_MEMBERSCOUNT = #{record.nMemberscount,jdbcType=INTEGER},
+      C_DEPARTMENTNAME = #{record.cDepartmentname,jdbcType=VARCHAR},
+      C_NAME = #{record.cName,jdbcType=VARCHAR},
+      N_PRODUCTIONID = #{record.nProductionid,jdbcType=INTEGER},
+      N_LEADERUSERID = #{record.nLeaderuserid,jdbcType=INTEGER},
+      C_LEADERNAME = #{record.cLeadername,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.entity.TTeam">
+    update t_team
+    <set>
+      <if test="nTeamid != null">
+        N_TEAMID = #{nTeamid,jdbcType=INTEGER},
+      </if>
+      <if test="nMemberscount != null">
+        N_MEMBERSCOUNT = #{nMemberscount,jdbcType=INTEGER},
+      </if>
+      <if test="cDepartmentname != null">
+        C_DEPARTMENTNAME = #{cDepartmentname,jdbcType=VARCHAR},
+      </if>
+      <if test="cName != null">
+        C_NAME = #{cName,jdbcType=VARCHAR},
+      </if>
+      <if test="nProductionid != null">
+        N_PRODUCTIONID = #{nProductionid,jdbcType=INTEGER},
+      </if>
+      <if test="nLeaderuserid != null">
+        N_LEADERUSERID = #{nLeaderuserid,jdbcType=INTEGER},
+      </if>
+      <if test="cLeadername != null">
+        C_LEADERNAME = #{cLeadername,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where C_ID = #{cId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.TTeam">
+    update t_team
+    set N_TEAMID = #{nTeamid,jdbcType=INTEGER},
+      N_MEMBERSCOUNT = #{nMemberscount,jdbcType=INTEGER},
+      C_DEPARTMENTNAME = #{cDepartmentname,jdbcType=VARCHAR},
+      C_NAME = #{cName,jdbcType=VARCHAR},
+      N_PRODUCTIONID = #{nProductionid,jdbcType=INTEGER},
+      N_LEADERUSERID = #{nLeaderuserid,jdbcType=INTEGER},
+      C_LEADERNAME = #{cLeadername,jdbcType=VARCHAR}
+    where C_ID = #{cId,jdbcType=VARCHAR}
+  </update>
+</mapper>
