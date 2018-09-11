@@ -13,7 +13,7 @@ import java.util.List;
 public interface IUserService {
     public void saveUser(Users users);
 
-    public Users findUserByName(String name);
+    public Users findUserByNameAndAge(String name, int age);
 
     public void removeUser(String name);
 

@@ -20,9 +20,10 @@ public class UserServiceImpl implements IUserService {
         mongoTemplate.save(users);
     }
 
-    public Users findUserByName(String name) {
-        return mongoTemplate.findOne(
-                new Query(Criteria.where("name").is(name)), Users.class);
+    public Users findUserByNameAndAge(String name, int age) {
+        Criteria criatira = new Criteria();
+        criatira.andOperator(Criteria.where("name").is(name), Criteria.where("age").is(age));
+        return mongoTemplate.findOne(new Query(criatira), Users.class);
     }
 
     public void removeUser(String name) {

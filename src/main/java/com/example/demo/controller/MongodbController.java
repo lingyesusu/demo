@@ -43,10 +43,10 @@ public class MongodbController {
 
     @ResponseBody
     @RequestMapping("/getList")
-    public String getList(){
+    public List<Users> getList(){
         List<Users> list = userService.listUser();
         System.out.println("一共这么多人:"+list.size());
-        return "success";
+        return list;
     }
 
     @ResponseBody
@@ -54,6 +54,13 @@ public class MongodbController {
     public String del(){
         userService.removeUser("与他故意");
         return "success";
+    }
+
+    @ResponseBody
+    @RequestMapping("/findUserByNameAndAge")
+    public Users findUserByNameAndAge(){
+        Users users = userService.findUserByNameAndAge("小明", 10);
+        return users;
     }
 
 }
