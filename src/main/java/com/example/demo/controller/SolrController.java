@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.TTeam;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -107,7 +109,7 @@ public class SolrController {
      */
     @ResponseBody
     @RequestMapping("/search")
-    public Map<String, Map<String, List<String>>> search(){
+    public List<TTeam> search(){
 
         try {
             SolrQuery params = new SolrQuery();
@@ -119,25 +121,28 @@ public class SolrController {
             params.setStart(0);
             params.setRows(20);
 
-            params.set("q", "563817d2e01");
+            params.setQuery("*:*");
+
+//            params.set("q", "*.*");
 
             //只查询指定域
-            params.set("fl", "id,cName,cLeadername");
+//            params.set("fl", "id,cName,cLeadername");
 
             //默认域
-            params.set("df", "id");
+//            params.set("df", "id");
 
             //高亮
             //打开开关
             params.setHighlight(true);
             //指定高亮域
-            params.addHighlightField("id");
+            params.addHighlightField("cName");
+            params.setParam("hl.fl", "cName");
             //设置前缀
-            params.setHighlightSimplePre("<span style='color:red'>");
+            params.setHighlightSimplePre("<font color='red'>");
             //设置后缀
-            params.setHighlightSimplePost("</span>");
+            params.setHighlightSimplePost("</font>");
 
-            QueryResponse queryResponse = client.query(params);
+            QueryResponse queryResponse = client.query("corename",params);
 
             SolrDocumentList results = queryResponse.getResults();
 
@@ -147,20 +152,29 @@ public class SolrController {
 
             //获取高亮显示的结果, 高亮显示的结果和查询结果是分开放的
             Map<String, Map<String, List<String>>> highlight = queryResponse.getHighlighting();
-
+            List<TTeam> tTeams = new ArrayList<TTeam>();
             for (SolrDocument result : results) {
-                System.out.println(result.get("id"));
-                System.out.println(result.get("cName"));
-                System.out.println(result.get("cLeadername"));
+                TTeam tTeam = new TTeam();
+                String id = (String) result.get("id");
+                //高亮显示是title的高亮显示
+                List<String> list = highlight.get(result.get("id")).get("cName");
+                String cName="";
+                if (list!=null && list.size()>0) {
+                    cName=list.get(0);
+                }
+                String cLeadername = (String) result.get("cLeadername");
+                tTeam.setcId(id);
+                tTeam.setcName(cName);
+                tTeam.setcLeadername(cLeadername);
 
-                Map<String, List<String>> map = highlight.get(result.get("id"));
-                List<String> list = map.get("cName");
-                System.out.println(list.get(0));
-
+//                cName = (String) result.get("cName");
+                System.out.println(id);
+                System.out.println(cName);
+                System.out.println(cLeadername);
                 System.out.println("------------------");
-                System.out.println();
+                tTeams.add(tTeam);
             }
-            return highlight;
+            return tTeams;
         } catch (Exception e) {
             e.printStackTrace();
         }
